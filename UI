@@ -1,0 +1,619 @@
+local Library = {}
+
+	function Library:Create()
+		local UIlib = Instance.new("ScreenGui")
+		local UIPadding = Instance.new("UIPadding")
+		local UIListLayout = Instance.new("UIListLayout")
+		
+		UIlib.Name = "UI LIBRARY"
+		UIlib.Parent = game:GetService("CoreGui")
+		UIlib.ResetOnSpawn = false
+		
+		UIPadding.Parent = UIlib
+		UIPadding.PaddingLeft = UDim.new(0, 10)
+		UIPadding.PaddingTop = UDim.new(0, 10)
+		
+		UIListLayout.Parent = UIlib
+		UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		UIListLayout.Padding = UDim.new(0, 2)
+		local Tabs = {}
+		
+			function Tabs:CreateWindow(Title)
+				local FrameItems = 0
+				local Settings = {
+					Normal = Color3.fromRGB(10, 15, 25);
+					Activated = Color3.fromRGB(20, 30, 50);
+					NormalText = Color3.fromRGB(200, 200, 200);
+					ActivatedText = Color3.fromRGB(250, 250, 250);
+					TextFont = Enum.Font.SourceSansBold;
+					FontSize = 16;
+					Tween = function(object, waittime, properties)
+						game:GetService("TweenService"):Create(object, TweenInfo.new(waittime, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, 0, false, 0), properties):Play()
+					end;
+				}
+
+				local TopFrame = Instance.new("ImageLabel")
+				local TitleLabel = Instance.new("TextLabel")
+				local MainFrame = Instance.new("ImageLabel")
+				local itemLayout = Instance.new("UIListLayout")
+				local TopFrameButton = Instance.new("TextButton")
+				
+				TopFrame.Name = "TopFrame"
+				TopFrame.Parent = UIlib
+				TopFrame.AnchorPoint = Vector2.new(1, 1)
+				TopFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				TopFrame.BackgroundTransparency = 1.000
+				TopFrame.Position = UDim2.new(0.165000007, 0, 0.0599999987, 0)
+				TopFrame.Size = UDim2.new(0, 200, 0, 25)
+				TopFrame.Image = "rbxassetid://3570695787"
+				TopFrame.ImageColor3 = Color3.fromRGB(10, 15, 25)
+				TopFrame.ScaleType = Enum.ScaleType.Slice
+				TopFrame.SliceCenter = Rect.new(100, 100, 100, 100)
+				TopFrame.SliceScale = 0.040
+	
+				local Visible = true
+				game:GetService("UserInputService").InputBegan:Connect(function(input)
+  			    	   if input.KeyCode == Enum.KeyCode.RightShift or input.KeyCode == Enum.KeyCode.P or input.KeyCode == Enum.KeyCode.LeftShift then
+       					      Visible = not Visible
+							  TopFrame.Visible = Visible 
+					   end
+				end)
+
+				TitleLabel.Name = "TitleLabel"
+				TitleLabel.Parent = TopFrame
+				TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				TitleLabel.BackgroundTransparency = 1.000
+				TitleLabel.Size = UDim2.new(0, 200, 0, 25)
+				TitleLabel.Font = Settings.TextFont
+				TitleLabel.Text = Title
+				TitleLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+				TitleLabel.TextSize = Settings.FontSize
+				
+				MainFrame.Name = "MainFrame"
+				MainFrame.Parent = TopFrame
+				MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				MainFrame.BackgroundTransparency = 1.000
+				MainFrame.Position = UDim2.new(0, 0, 1.10000002, 0)
+				MainFrame.Size = UDim2.new(0, 200, 0, 25)
+				MainFrame.Image = "rbxassetid://3570695787"
+				MainFrame.ImageColor3 = Color3.fromRGB(7, 8, 21)
+				MainFrame.ScaleType = Enum.ScaleType.Slice
+				MainFrame.SliceCenter = Rect.new(100, 100, 100, 100)
+				MainFrame.SliceScale = 0.040
+				MainFrame.ClipsDescendants = true
+				
+				itemLayout.Name = "itemLayout"
+				itemLayout.Parent = MainFrame
+				itemLayout.SortOrder = Enum.SortOrder.LayoutOrder
+				
+				TopFrameButton.Name = "TopFrameButton"
+				TopFrameButton.Parent = TopFrame
+				TopFrameButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				TopFrameButton.BackgroundTransparency = 1.000
+				TopFrameButton.Size = UDim2.new(0, 200, 0, 25)
+				TopFrameButton.Font = Enum.Font.SourceSans
+				TopFrameButton.Text = ""
+				TopFrameButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+				TopFrameButton.TextSize = 14.000
+				
+				local IsVisible = false
+				
+				local function Resize()
+					local Ycounter = 0
+					for i = 1, FrameItems do
+						Ycounter = Ycounter + 24
+					end
+					MainFrame:TweenSize(UDim2.new(0,200,0,Ycounter), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+						IsVisible = true
+						MainFrame.ClipsDescendants = false
+					end)
+				end
+				
+				TopFrame.MouseEnter:Connect(function()
+					Settings.Tween(TopFrame, .2, {ImageColor3 = Settings.Activated})
+					Settings.Tween(TitleLabel, .2, {TextColor3 = Settings.ActivatedText})
+				end)
+				TopFrame.MouseLeave:Connect(function()
+					Settings.Tween(TopFrame, .2, {ImageColor3 = Settings.Normal})
+					Settings.Tween(TitleLabel, .2, {TextColor3 = Settings.NormalText})
+				end)
+				
+				TopFrameButton.MouseButton1Down:Connect(function()
+					Settings.Tween(TopFrame, .2, {ImageColor3 = Settings.Normal})
+					Settings.Tween(TitleLabel, .2, {TextColor3 = Settings.NormalText})
+				end)
+				
+				TopFrameButton.MouseButton1Up:Connect(function()
+					Settings.Tween(TopFrame, .2, {ImageColor3 = Settings.Activated})
+					Settings.Tween(TitleLabel, .2, {TextColor3 = Settings.ActivatedText})
+					if IsVisible == false then 
+						Resize()
+					elseif IsVisible == true then
+						MainFrame.ClipsDescendants = true
+						MainFrame:TweenSize(UDim2.new(0,200,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+							IsVisible = false
+						end)
+					end
+				end)
+				
+				local Items = {}
+				
+					function Items:Button(Text, Callback)
+						FrameItems = FrameItems + 1
+						
+						local ButtonHolder = Instance.new("Frame")
+						local ButtonConnect = Instance.new("TextButton")
+						local ButtonRounding = Instance.new("ImageLabel")
+						local ButtonLabel = Instance.new("TextLabel")
+						
+						ButtonHolder.Name = "ButtonHolder"
+						ButtonHolder.Parent = MainFrame
+						ButtonHolder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ButtonHolder.BackgroundTransparency = 1.000
+						ButtonHolder.BorderSizePixel = 0
+						ButtonHolder.Size = UDim2.new(0, 200, 0, 24)
+						
+						ButtonConnect.Name = "ButtonConnect"
+						ButtonConnect.Parent = ButtonHolder
+						ButtonConnect.AnchorPoint = Vector2.new(0.5, 0.5)
+						ButtonConnect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ButtonConnect.BackgroundTransparency = 1.000
+						ButtonConnect.BorderSizePixel = 0
+						ButtonConnect.Position = UDim2.new(0.499749988, 0, 0.5, 0)
+						ButtonConnect.Size = UDim2.new(0, 194, 0, 20)
+						ButtonConnect.AutoButtonColor = false
+						ButtonConnect.Font = Enum.Font.SourceSans
+						ButtonConnect.Text = ""
+						ButtonConnect.TextColor3 = Color3.fromRGB(0, 0, 0)
+						ButtonConnect.TextSize = 14.000
+						
+						ButtonRounding.Name = "ButtonRounding"
+						ButtonRounding.Parent = ButtonConnect
+						ButtonRounding.Active = true
+						ButtonRounding.AnchorPoint = Vector2.new(0.5, 0.5)
+						ButtonRounding.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ButtonRounding.BackgroundTransparency = 1.000
+						ButtonRounding.Position = UDim2.new(0.5, 0, 0.5, 0)
+						ButtonRounding.Selectable = true
+						ButtonRounding.Size = UDim2.new(1, 0, 1, 0)
+						ButtonRounding.Image = "rbxassetid://3570695787"
+						ButtonRounding.ImageColor3 = Color3.fromRGB(10, 15, 25)
+						ButtonRounding.ScaleType = Enum.ScaleType.Slice
+						ButtonRounding.SliceCenter = Rect.new(100, 100, 100, 100)
+						ButtonRounding.SliceScale = 0.040
+						
+						ButtonLabel.Name = "ButtonLabel"
+						ButtonLabel.Parent = ButtonConnect
+						ButtonLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+						ButtonLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ButtonLabel.BackgroundTransparency = 1.000
+						ButtonLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+						ButtonLabel.Size = UDim2.new(1, 0, 1, 0)
+						ButtonLabel.Font = Settings.TextFont
+						ButtonLabel.Text = Text
+						ButtonLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+						ButtonLabel.TextSize = Settings.FontSize
+						
+						ButtonConnect.MouseEnter:Connect(function()
+							spawn(function()
+								Settings.Tween(ButtonRounding, .2, {ImageColor3 = Settings.Activated})
+								Settings.Tween(ButtonLabel, .2, {TextColor3 = Settings.ActivatedText})
+							end)
+						end)
+						ButtonConnect.MouseLeave:Connect(function()
+							spawn(function()
+								Settings.Tween(ButtonRounding, .2, {ImageColor3 = Settings.Normal})
+								Settings.Tween(ButtonLabel, .2, {TextColor3 = Settings.NormalText})
+							end)
+						end)
+						
+						ButtonConnect.MouseButton1Down:Connect(function()
+							spawn(function()
+								Settings.Tween(ButtonRounding, .2, {ImageColor3 = Settings.Normal})
+								Settings.Tween(ButtonLabel, .2, {TextColor3 = Settings.NormalText})
+							end)
+						end)
+						
+						ButtonConnect.MouseButton1Up:Connect(function()
+							spawn(function()
+								Settings.Tween(ButtonRounding, .2, {ImageColor3 = Settings.Activated})
+								Settings.Tween(ButtonLabel, .2, {TextColor3 = Settings.ActivatedText})
+							end)
+						end)
+						ButtonConnect.MouseButton1Up:Connect(Callback)
+						MainFrame:TweenSize(UDim2.new(0,200,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+							IsVisible = false
+						end)
+					end
+                    
+                    local DropdownCounter = 0
+					function Items:Dropdown(Text, Items, Callback)
+						FrameItems = FrameItems + 1
+                        DropdownCounter = DropdownCounter + 1
+                        
+						local DropdownHolder = Instance.new("Frame")
+						local DropdownConnect = Instance.new("TextButton")
+						local DropdownButtonRounding = Instance.new("ImageLabel")
+						local DropdownButtonLabel = Instance.new("TextLabel")
+						local DropdownIndicatorLabel = Instance.new("TextLabel")
+						local DropdownItemHolder = Instance.new("ImageLabel")
+						local DropdownLayout = Instance.new("UIListLayout")
+						
+						DropdownHolder.Name = "DropdownHolder"
+						DropdownHolder.Parent = MainFrame
+						DropdownHolder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						DropdownHolder.BackgroundTransparency = 1.000
+						DropdownHolder.BorderSizePixel = 0
+						DropdownHolder.Position = UDim2.new(0.295839757, 0, 0.376296282, 0)
+						DropdownHolder.Size = UDim2.new(0, 200, 0, 24)
+						
+						DropdownConnect.Name = "DropdownConnect"
+						DropdownConnect.Parent = DropdownHolder
+						DropdownConnect.AnchorPoint = Vector2.new(0.5, 0.5)
+						DropdownConnect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						DropdownConnect.BackgroundTransparency = 1.000
+						DropdownConnect.BorderSizePixel = 0
+						DropdownConnect.Position = UDim2.new(0.5, 0, 0.5, 0)
+						DropdownConnect.Size = UDim2.new(0, 194, 0, 20)
+						DropdownConnect.AutoButtonColor = false
+						DropdownConnect.Font = Enum.Font.SourceSans
+						DropdownConnect.Text = ""
+						DropdownConnect.TextColor3 = Color3.fromRGB(0, 0, 0)
+						DropdownConnect.TextSize = 14.000
+						
+						DropdownButtonRounding.Name = "DropdownButtonRounding"
+						DropdownButtonRounding.Parent = DropdownConnect
+						DropdownButtonRounding.Active = true
+						DropdownButtonRounding.AnchorPoint = Vector2.new(0.5, 0.5)
+						DropdownButtonRounding.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						DropdownButtonRounding.BackgroundTransparency = 1.000
+						DropdownButtonRounding.Position = UDim2.new(0.5, 0, 0.5, 0)
+						DropdownButtonRounding.Selectable = true
+						DropdownButtonRounding.Size = UDim2.new(1, 0, 1, 0)
+						DropdownButtonRounding.Image = "rbxassetid://3570695787"
+						DropdownButtonRounding.ImageColor3 = Color3.fromRGB(10, 15, 25)
+						DropdownButtonRounding.ScaleType = Enum.ScaleType.Slice
+						DropdownButtonRounding.SliceCenter = Rect.new(100, 100, 100, 100)
+						DropdownButtonRounding.SliceScale = 0.040
+						
+						DropdownButtonLabel.Name = "DropdownButtonLabel"
+						DropdownButtonLabel.Parent = DropdownConnect
+						DropdownButtonLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+						DropdownButtonLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						DropdownButtonLabel.BackgroundTransparency = 1.000
+						DropdownButtonLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+						DropdownButtonLabel.Size = UDim2.new(1, 0, 1, 0)
+						DropdownButtonLabel.ZIndex = 104 + DropdownCounter * 2
+						DropdownButtonLabel.Font = Settings.TextFont
+						DropdownButtonLabel.Text = Text
+						DropdownButtonLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+						DropdownButtonLabel.TextSize = Settings.FontSize
+						
+						DropdownIndicatorLabel.Name = "DropdownIndicatorLabel"
+						DropdownIndicatorLabel.Parent = DropdownConnect
+						DropdownIndicatorLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+						DropdownIndicatorLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						DropdownIndicatorLabel.BackgroundTransparency = 1.000
+						DropdownIndicatorLabel.Position = UDim2.new(0.94599998, 0, 0.5, 0)
+						DropdownIndicatorLabel.Size = UDim2.new(0, 20, 0, 20)
+						DropdownIndicatorLabel.ZIndex = 103 + DropdownCounter * 2
+						DropdownIndicatorLabel.Font = Settings.TextFont
+						DropdownIndicatorLabel.Text = ">"
+						DropdownIndicatorLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+						DropdownIndicatorLabel.TextSize = Settings.FontSize
+						
+						DropdownItemHolder.Name = "DropdownItemHolder"
+						DropdownItemHolder.Parent = DropdownConnect
+						DropdownItemHolder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						DropdownItemHolder.BackgroundTransparency = 1.000
+						DropdownItemHolder.ClipsDescendants = true
+						DropdownItemHolder.Position = UDim2.new(0, 0, 1.10000002, 0)
+						DropdownItemHolder.Size = UDim2.new(0, 194, 0, 0)
+						DropdownItemHolder.ZIndex = 100 + DropdownCounter * 4
+						DropdownItemHolder.Image = "rbxassetid://3570695787"
+						DropdownItemHolder.ImageColor3 = Color3.fromRGB(13, 19, 33)
+						DropdownItemHolder.ScaleType = Enum.ScaleType.Slice
+						DropdownItemHolder.SliceCenter = Rect.new(100, 100, 100, 100)
+						DropdownItemHolder.SliceScale = 0.040
+						
+						DropdownLayout.Name = "DropdownLayout"
+						DropdownLayout.Parent = DropdownItemHolder
+						DropdownLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+						DropdownLayout.SortOrder = Enum.SortOrder.LayoutOrder
+						DropdownLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+						DropdownLayout.Padding = UDim.new(0, 2)
+						
+						local IsVisible = false
+						
+						local ChangedIndex = false
+						function ChangeIndex()
+							ChangedIndex = not ChangedIndex
+							for i,v in pairs(TopFrame:GetDescendants()) do
+								if not v:IsA("LocalScript") and not v:IsA("UIListLayout") and not v:IsA("UIPadding") and not v:IsDescendantOf(DropdownConnect) and v.Name ~= "TopFrameButton" and v.Name ~= "TitleLabel" then 
+									v.ZIndex = ChangedIndex and v.ZIndex - 1 or v.ZIndex + 1
+								end
+							end
+						end
+						
+						function returnSize(items)
+							local Ycounter = 0
+							for i = 1, #items do
+								Ycounter = Ycounter + 23
+							end
+							return UDim2.new(0,194,0,Ycounter)
+						end
+						
+						for i,v in pairs(Items) do 
+							local itemConnect = Instance.new("TextButton")
+							local itemRounding = Instance.new("ImageLabel")
+							local itemLabel = Instance.new("TextLabel")
+							
+							itemConnect.Name = v
+							itemConnect.Parent = DropdownItemHolder
+							itemConnect.AnchorPoint = Vector2.new(0.5, 0.5)
+							itemConnect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+							itemConnect.BackgroundTransparency = 1.000
+							itemConnect.BorderSizePixel = 0
+							itemConnect.Position = UDim2.new(0.0255232453, 0, 6.09935904, 0)
+							itemConnect.Size = UDim2.new(0, 180, 0, 20)
+							itemConnect.AutoButtonColor = false
+							itemConnect.Font = Enum.Font.SourceSans
+                            itemConnect.Text = ""
+                            itemConnect.ZIndex = 103 + DropdownCounter * 4
+							itemConnect.TextColor3 = Color3.fromRGB(0, 0, 0)
+							itemConnect.TextSize = 14.000
+							itemConnect.MouseButton1Down:Connect(function()
+								Callback(itemConnect.Name)
+								Settings.Tween(DropdownIndicatorLabel, .2, {Rotation = IsVisible and 0 or 90})
+								DropdownItemHolder:TweenSize(UDim2.new(0,194,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+									IsVisible = false		
+									ChangeIndex()
+								end)
+								Settings.Tween(itemRounding, .2, {ImageColor3 = Settings.Activated})
+								Settings.Tween(itemLabel, .2, {TextColor3 = Settings.ActivatedText})
+							end)
+								
+							itemConnect.MouseEnter:Connect(function()
+								Settings.Tween(itemRounding, .2, {ImageColor3 = Settings.Activated})
+								Settings.Tween(itemLabel, .2, {TextColor3 = Settings.ActivatedText})
+							end)
+							itemConnect.MouseLeave:Connect(function()
+								Settings.Tween(itemRounding, .2, {ImageColor3 = Settings.Normal})
+								Settings.Tween(itemLabel, .2, {TextColor3 = Settings.NormalText})
+							end)
+							
+							itemConnect.MouseButton1Up:Connect(function()
+								Settings.Tween(itemRounding, .2, {ImageColor3 = Settings.Normal})
+								Settings.Tween(itemLabel, .2, {TextColor3 = Settings.NormalText})
+							end)
+								
+							itemRounding.Name = "itemRounding"
+							itemRounding.Parent = itemConnect
+							itemRounding.Active = true
+							itemRounding.AnchorPoint = Vector2.new(0.5, 0.5)
+							itemRounding.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+							itemRounding.BackgroundTransparency = 1.000
+							itemRounding.Position = UDim2.new(0.499596179, 0, 0.5, 0)
+							itemRounding.Selectable = true
+							itemRounding.ZIndex = 101 + DropdownCounter * 5
+							itemRounding.Size = UDim2.new(1, 0, 1, 0)
+							itemRounding.Image = "rbxassetid://3570695787"
+							itemRounding.ImageColor3 = Color3.fromRGB(10, 15, 25)
+							itemRounding.ScaleType = Enum.ScaleType.Slice
+							itemRounding.SliceCenter = Rect.new(100, 100, 100, 100)
+							itemRounding.SliceScale = 0.040
+							
+							itemLabel.Name = "itemLabel"
+							itemLabel.Parent = itemConnect
+							itemLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+							itemLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+							itemLabel.BackgroundTransparency = 1.000
+							itemLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+							itemLabel.Size = UDim2.new(1, 0, 1, 0)
+							itemLabel.Font = Settings.TextFont
+							itemLabel.Text = v
+							itemLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+							itemLabel.TextSize = Settings.FontSize
+							itemLabel.ZIndex = 102 + DropdownCounter * 7
+						end
+						
+						DropdownConnect.MouseEnter:Connect(function()
+							Settings.Tween(DropdownButtonRounding, .2, {ImageColor3 = Settings.Activated})
+							Settings.Tween(TitleLabel, .2, {TextColor3 = Settings.ActivatedText})
+						end)
+						DropdownConnect.MouseLeave:Connect(function()
+							Settings.Tween(DropdownButtonRounding, .2, {ImageColor3 = Settings.Normal})
+							Settings.Tween(TitleLabel, .2, {TextColor3 = Settings.NormalText})
+						end)
+						
+						DropdownConnect.MouseButton1Down:Connect(function()
+							Settings.Tween(DropdownButtonRounding, .2, {ImageColor3 = Settings.Normal})
+							Settings.Tween(TitleLabel, .2, {TextColor3 = Settings.NormalText})
+						end)
+						
+						DropdownConnect.MouseButton1Up:Connect(function()
+							Settings.Tween(DropdownButtonRounding, .2, {ImageColor3 = Settings.Activated})
+							Settings.Tween(TitleLabel, .2, {TextColor3 = Settings.ActivatedText})
+							Settings.Tween(DropdownIndicatorLabel, .2, {Rotation = IsVisible and 0 or 90})
+							if IsVisible == false then 
+								ChangeIndex()
+								DropdownItemHolder:TweenSize(returnSize(Items), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+									IsVisible = true
+								end)
+							elseif IsVisible == true then
+								DropdownItemHolder:TweenSize(UDim2.new(0,194,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+									IsVisible = false
+									ChangeIndex()
+								end)
+							end
+						end)
+						MainFrame:TweenSize(UDim2.new(0,200,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+							IsVisible = false
+						end)
+					end
+					
+					function Items:TextBox(Text, Callback)
+						FrameItems = FrameItems + 1
+						
+						local TextBoxHolder = Instance.new("Frame")
+						local TextBox = Instance.new("TextBox")
+						local TextBoxRounding = Instance.new("ImageLabel")
+						
+						TextBoxHolder.Name = "TextBoxHolder"
+						TextBoxHolder.Parent = MainFrame
+						TextBoxHolder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						TextBoxHolder.BackgroundTransparency = 1.000
+						TextBoxHolder.BorderSizePixel = 0
+						TextBoxHolder.Size = UDim2.new(0, 200, 0, 24)
+						
+						TextBox.Parent = TextBoxHolder
+						TextBox.AnchorPoint = Vector2.new(0.5, 0.5)
+						TextBox.BackgroundColor3 = Color3.fromRGB(10, 15, 25)
+						TextBox.BackgroundTransparency = 1.000
+						TextBox.BorderSizePixel = 0
+						TextBox.Position = UDim2.new(0.5, 0, 0.5, 0)
+						TextBox.Size = UDim2.new(0, 194, 0, 20)
+						TextBox.ZIndex = 2
+						TextBox.Font = Settings.TextFont
+						TextBox.PlaceholderText = Text
+						TextBox.Text = ""
+						TextBox.TextColor3 = Color3.fromRGB(200, 200, 200)
+						TextBox.TextSize = Settings.FontSize
+						
+						TextBoxRounding.Name = "TextBoxRounding"
+						TextBoxRounding.Parent = TextBox
+						TextBoxRounding.Active = true
+						TextBoxRounding.AnchorPoint = Vector2.new(0.5, 0.5)
+						TextBoxRounding.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						TextBoxRounding.BackgroundTransparency = 1.000
+						TextBoxRounding.Position = UDim2.new(0.5, 0, 0.5, 0)
+						TextBoxRounding.Selectable = true
+						TextBoxRounding.Size = UDim2.new(1, 0, 1, 0)
+						TextBoxRounding.Image = "rbxassetid://3570695787"
+						TextBoxRounding.ImageColor3 = Color3.fromRGB(10, 15, 25)
+						TextBoxRounding.ScaleType = Enum.ScaleType.Slice
+						TextBoxRounding.SliceCenter = Rect.new(100, 100, 100, 100)
+						TextBoxRounding.SliceScale = 0.040
+						
+						TextBox.MouseEnter:Connect(function()
+							Settings.Tween(TextBoxRounding, .2, {ImageColor3 = Settings.Activated})
+							Settings.Tween(TextBox, .2, {TextColor3 = Settings.ActivatedText})
+						end)
+						TextBox.MouseLeave:Connect(function()
+							Settings.Tween(TextBoxRounding, .2, {ImageColor3 = Settings.Normal})
+							Settings.Tween(TextBox, .2, {TextColor3 = Settings.NormalText})
+						end)
+						
+						TextBox.Focused:Connect(function()
+							Settings.Tween(TextBoxRounding, .2, {ImageColor3 = Settings.Normal})
+							Settings.Tween(TextBox, .2, {TextColor3 = Settings.NormalText})
+							wait(.2)
+							Settings.Tween(TextBoxRounding, .2, {ImageColor3 = Settings.Activated})
+							Settings.Tween(TextBox, .2, {TextColor3 = Settings.ActivatedText})
+						end)
+						
+						TextBox.FocusLost:Connect(function()
+							Callback(TextBox.Text)
+							TextBox.Text = ""
+							Settings.Tween(TextBoxRounding, .2, {ImageColor3 = Settings.Normal})
+							Settings.Tween(TextBox, .2, {TextColor3 = Settings.NormalText})
+							wait(.2)
+							Settings.Tween(TextBoxRounding, .2, {ImageColor3 = Settings.Activated})
+							Settings.Tween(TextBox, .2, {TextColor3 = Settings.ActivatedText})
+							wait(.2)
+							Settings.Tween(TextBoxRounding, .2, {ImageColor3 = Settings.Normal})
+							Settings.Tween(TextBox, .2, {TextColor3 = Settings.NormalText})
+						end)
+						MainFrame:TweenSize(UDim2.new(0,200,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+							IsVisible = false
+						end)
+					end
+					
+					function Items:Toggle(Text, Callback)
+						FrameItems = FrameItems + 1
+						
+						local ToggleHolder = Instance.new("Frame")
+						local ToggleIndicatorFrame = Instance.new("ImageLabel")
+						local ToggelLabel = Instance.new("TextLabel")
+						local ToggleIndicatorButton = Instance.new("TextButton")
+						
+						ToggleHolder.Name = "ToggleHolder"
+						ToggleHolder.Parent = MainFrame
+						ToggleHolder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ToggleHolder.BackgroundTransparency = 1.000
+						ToggleHolder.BorderSizePixel = 0
+						ToggleHolder.Size = UDim2.new(0, 200, 0, 24)
+						
+						ToggleIndicatorFrame.Name = "ToggleIndicatorFrame"
+						ToggleIndicatorFrame.Parent = ToggleHolder
+						ToggleIndicatorFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+						ToggleIndicatorFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ToggleIndicatorFrame.BackgroundTransparency = 1.000
+						ToggleIndicatorFrame.Position = UDim2.new(0.936999977, 0, 0.5, 0)
+						ToggleIndicatorFrame.Size = UDim2.new(0, 20, 0, 20)
+						ToggleIndicatorFrame.Image = "rbxassetid://3570695787"
+						ToggleIndicatorFrame.ImageColor3 = Color3.fromRGB(10, 15, 25)
+						ToggleIndicatorFrame.ScaleType = Enum.ScaleType.Slice
+						ToggleIndicatorFrame.SliceCenter = Rect.new(100, 100, 100, 100)
+						ToggleIndicatorFrame.SliceScale = 0.040
+						
+						ToggelLabel.Name = "ToggelLabel"
+						ToggelLabel.Parent = ToggleHolder
+						ToggelLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+						ToggelLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ToggelLabel.BackgroundTransparency = 1.000
+						ToggelLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+						ToggelLabel.Size = UDim2.new(0, 170, 0, 20)
+						ToggelLabel.Font = Enum.Font.SourceSansBold
+						ToggelLabel.Text = Text
+						ToggelLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+						ToggelLabel.TextSize = 16.000
+						
+						ToggleIndicatorButton.Name = "ToggleIndicatorButton"
+						ToggleIndicatorButton.Parent = ToggleHolder
+						ToggleIndicatorButton.AnchorPoint = Vector2.new(0.5, 0.5)
+						ToggleIndicatorButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ToggleIndicatorButton.BackgroundTransparency = 1.000
+						ToggleIndicatorButton.Position = UDim2.new(0.5, 0, 0.5, 0)
+						ToggleIndicatorButton.Size = UDim2.new(1, 0, 1, 0)
+						ToggleIndicatorButton.AutoButtonColor = false
+						ToggleIndicatorButton.Font = Enum.Font.SourceSans
+						ToggleIndicatorButton.Text = ""
+						ToggleIndicatorButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+						ToggleIndicatorButton.TextSize = 14.000
+						
+						ToggleHolder.MouseEnter:Connect(function()
+							Settings.Tween(ToggelLabel, .2, {TextColor3 = Settings.ActivatedText})
+						end)
+						ToggleHolder.MouseLeave:Connect(function()
+							Settings.Tween(ToggelLabel, .2, {TextColor3 = Settings.NormalText})
+						end)
+						
+						local IsToggled = false
+						
+						ToggleIndicatorButton.MouseButton1Up:Connect(function()
+							if IsToggled == false then 
+								Settings.Tween(ToggleIndicatorFrame, .2, {ImageColor3 = Settings.Activated})
+								wait(.2)
+								IsToggled = true
+								Callback(IsToggled)
+							elseif IsToggled == true then
+								Settings.Tween(ToggleIndicatorFrame, .2, {ImageColor3 = Settings.Normal})
+								wait(.2)
+								IsToggled = false
+								Callback(IsToggled)
+							end
+						end)
+						MainFrame:TweenSize(UDim2.new(0,200,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, .2, false, function()
+							IsVisible = false
+						end)
+					end
+				
+				return Items
+			end
+				
+		return Tabs
+	end
+
+return Library
